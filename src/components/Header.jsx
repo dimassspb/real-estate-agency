@@ -16,9 +16,15 @@ export default function Header() {
     //         }
     //     });
     // }, [auth]);
-    console.log(location.pathname)
-    const pathMatchRoute = (route) => (route === location.pathname ? true : false)
-   
+    console.log(location.pathname);
+    const pathMatchRoute = (route) => {
+        if (route === location.pathname) {
+            return "cursor-pointer py-3 text-sm font-semibold text-black border-b-[3px] border-b-red-500";
+        } else {
+            return "cursor-pointer py-3 text-sm font-semibold text-gray-400 border-b-[3px] border-b-transparent";
+        }
+    };
+
     return (
         <div className='bg-white border-b shadow-sm sticky top-0 z-40'>
             <header className='flex justify-between items-center px-3 max-w-6xl mx-auto'>
@@ -33,28 +39,25 @@ export default function Header() {
                 <div>
                     <ul className='flex space-x-10'>
                         <li
-                            className={`cursor-pointer py-3 text-sm font-semibold text-gray-400 border-b-[3px] border-b-transparent ${
-                                pathMatchRoute("/") &&
-                                "text-black border-b-red-500"
-                            }`}
+                            className={pathMatchRoute("/")}
                             onClick={() => navigate("/")}
                         >
                             Главная
                         </li>
                         <li
-                            className={`cursor-pointer py-3 text-sm font-semibold text-gray-400 border-b-[3px] border-b-transparent ${
-                                pathMatchRoute("/offers") &&
-                                "text-black border-b-red-500"
-                            }`}
-                            onClick={() => navigate("/offers")}
+                            className={pathMatchRoute("/sale")}
+                            onClick={() => navigate("/sale")}
                         >
-                            Предложения
+                            Продажа
                         </li>
                         <li
-                            className={`cursor-pointer py-3 text-sm font-semibold text-gray-400 border-b-[3px] border-b-transparent ${
-                                (pathMatchRoute("/sign-in")) &&
-                                "text-black border-b-red-500"
-                            }`}
+                            className={pathMatchRoute("/rent")}
+                            onClick={() => navigate("/rent")}
+                        >
+                            Аренда
+                        </li>
+                        <li
+                            className={pathMatchRoute("/sign-in")}
                             onClick={() => navigate("/sign-in")}
                         >
                             Войти
