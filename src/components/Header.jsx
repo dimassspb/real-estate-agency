@@ -27,7 +27,7 @@ export default function Header() {
 
     return (
         <div className='bg-white border-b shadow-sm sticky top-0 z-40'>
-            <header className='flex justify-between items-center px-3 max-w-6xl mx-auto'>
+            <header className='flex flex-wrap justify-around items-center px-3 max-w-8xl mx-auto'>
                 <div>
                     <img
                         src='logo.png'
@@ -37,7 +37,7 @@ export default function Header() {
                     />
                 </div>
                 <div>
-                    <ul className='flex space-x-10'>
+                    <ul className='flex flex-wrap justify-around space-x-10'>
                         <li
                             className={pathMatchRoute("/")}
                             onClick={() => navigate("/")}
@@ -55,6 +55,12 @@ export default function Header() {
                             onClick={() => navigate("/rent")}
                         >
                             Аренда
+                        </li>
+                        <li
+                            className={pathMatchRoute("/filters")}
+                            onClick={() => navigate("/filters")}
+                        >
+                            Фильтр
                         </li>
                         <li
                             className={pathMatchRoute("/sign-in")}

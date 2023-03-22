@@ -1,11 +1,19 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import OAuth from "../components/OAuth";
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    updateProfile,
+} from "firebase/auth";
+import { db } from "../firebase";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 export default function SignUp() {
     const [formData, setFormData] = useState({
-      name: "",
+        name: "",
         email: "",
         password: "",
     });
@@ -14,12 +22,40 @@ export default function SignUp() {
 
     const { name, email, password } = formData;
 
+    const navigate = useNavigate();
+
     const onChange = (e) => {
         setFormData((prevState) => ({
             ...prevState,
             [e.target.id]: e.target.value,
         }));
     };
+
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const auth = getAuth();
+            const userCredential = await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password,
+            );
+
+            updateProfile(auth.currentUser, { displayName: name });
+
+            const user = userCredential.user;
+
+            const formDataCopy = { ...formData };
+            delete formDataCopy.password;
+            formDataCopy.timestamp = serverTimestamp();
+            await setDoc(doc(db, "users", user.uid), formDataCopy);
+            toast.success("Регистрация прошла успешно")
+            navigate("/");
+        } catch (error) {
+            toast.error("Что-то пошло не так")
+        }
+    };
+
     return (
         <section>
             <h1 className='text-3xl text-center mt-6 font-bold'>Регистрация</h1>
@@ -32,12 +68,10 @@ export default function SignUp() {
                     />
                 </div>
                 <div className='w-full md:w-[67%] lg:w-[40%] lg:ml-20'>
-                    <form
-                    //  onSubmit={onSubmit}
-                    >
+                    <form onSubmit={onSubmit}>
                         <input
                             type='text'
-                            id='text'
+                            id='name'
                             value={name}
                             onChange={onChange}
                             placeholder='Ф.И.О.'
